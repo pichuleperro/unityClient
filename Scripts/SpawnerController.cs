@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SocketIO;
 
 public class SpawnerController : MonoBehaviour {
 
@@ -15,20 +16,64 @@ public class SpawnerController : MonoBehaviour {
      * 
      */
 
-    public float velocidadHelicoptero ;
+    SocketIOComponent io;
+
+    public float velocidadHelicoptero;
     public bool helicopteroEncendido;
+    public GameObject go;
     Rigidbody2D rb;
 
+    bool localPlayerInstantiated = false;
 
+
+    
+   
+
+    private void Awake() {
+
+        GameObject go = GameObject.Find("SocketIO");
+        io = go.GetComponent<SocketIOComponent>();
+
+    }
     void Start () {
+
         rb = GetComponent<Rigidbody2D>();
 
         StartCoroutine(Contador());
+
+        // EVENTOS NETWORKING
+
+        io.On("Partida", (resp)=> {
+
+            GameObject clone;
+
+            clone = Instantiate(go, transform.position, transform.rotation);
+
+            if(clone.GetComponent<CharacterData>()!= null) {
+            clone.GetComponent<CharacterData>().id = NetWorkManager.QuitarComillas(resp.data.GetField("id").ToString());
+            }
+
+           
+
+
+        });
+
+
 	}
 	
 	
 	void Update () {
-		
+
+       
+        // antes de saltar , esperar cierto tiempo 
+        if (Input.GetKeyDown(KeyCode.Space) && !localPlayerInstantiated ) {
+
+            localPlayerInstantiated = true;
+            io.Emit("Partida", NetWorkManager.InputJumpHelicopter() );
+            
+        }
+       
+
 	}
     private void FixedUpdate() {
 
@@ -58,7 +103,7 @@ public class SpawnerController : MonoBehaviour {
             yield return new WaitForSeconds(1f);
             print(i);
         }
-        //
+        
         yield return new WaitForSeconds(1f);
         print("el helicoptero acaba de partir");
         helicopteroEncendido = true;
@@ -66,4 +111,9 @@ public class SpawnerController : MonoBehaviour {
         
     }
 
+
+ 
+
 }
+
+//// emitir al servidor el momento en que caen los usuarios , el servidor debe buscar en la lista de salas el usuario y obtener su idRoom

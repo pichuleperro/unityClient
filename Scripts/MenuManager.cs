@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using SocketIO;
 using System;
 
@@ -14,6 +13,8 @@ public class MenuManager: MonoBehaviour {
     public GameObject settingMenu;
     public GameObject loadingPlayMode;
 
+    
+
     private void Awake() {
         GameObject go = GameObject.Find("SocketIO");
         io = go.GetComponent<SocketIOComponent>();
@@ -23,6 +24,8 @@ public class MenuManager: MonoBehaviour {
         io.On("BuscarSala", (resp) => {
             print(resp.data[0]);
         });
+
+      
    
 
         mainMenu.SetActive(true);
@@ -96,6 +99,15 @@ public class MenuManager: MonoBehaviour {
     {
         // cancelar el emparejamiento y volver a la pantalla principal
         // emitir al servidor que debe de eliminar al usuario del arreglo en la lista de salas
+
+        JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
+
+        obj.AddField("userName", NetWorkManager.userName);
+        obj.AddField("idDataBase", NetWorkManager.idDataBase);
+        obj.AddField("idSession", NetWorkManager.idSession);
+
+        io.Emit("Cancelar", obj);
+
         mainMenu.SetActive(true);
         playMenu.SetActive(false);
         settingMenu.SetActive(false);
@@ -119,13 +131,6 @@ public class MenuManager: MonoBehaviour {
 
         io.Emit("BuscarSala", obj);
 
-        //JSONObject obj = new JSONObject(JSONObject.Type.OBJECT);
-        //obj.AddField("busqueda", RandomIdRoom());
-  
-        //// emitir al servidor que se está buscando una sala. si no existe , crearla .
-        //io.Emit("rooms",obj);
-        
-        // Emparejar a los jugadores , si la sala esta completa , iniciar la escena y si no , seguir esperando.
 
         yield return new WaitForSeconds(2f);
         
