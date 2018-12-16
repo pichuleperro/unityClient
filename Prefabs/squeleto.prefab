@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 114006632220120978}
   - component: {fileID: 114031736480431682}
   - component: {fileID: 114162306013032838}
+  - component: {fileID: 114572860273139552}
   m_Layer: 0
   m_Name: squeleto
   m_TagString: Untagged
@@ -164,7 +165,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movX: 0
+  movLeft: 0
+  movRight: 0
   movY: 0
+  bottonLeftPressed: 0
+  bottonRightPressed: 0
+  bottonSpacePressed: 0
 --- !u!114 &114213333062796130
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -177,6 +183,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidad: 3
+--- !u!114 &114572860273139552
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1350611631606294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff07ded60806cc3438e89fc4dd91714e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212297013720670848
 SpriteRenderer:
   m_ObjectHideFlags: 1

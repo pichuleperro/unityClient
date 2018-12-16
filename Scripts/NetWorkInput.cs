@@ -15,6 +15,10 @@ public class NetWorkInput : MonoBehaviour {
     public float movRight;
     public float movY;
 
+    public bool bottonLeftPressed = false;
+    public bool bottonRightPressed = false;
+    public bool bottonSpacePressed = false;
+
 
     private void Awake() {
         GameObject go = GameObject.Find("SocketIO");
@@ -32,28 +36,30 @@ public class NetWorkInput : MonoBehaviour {
 
                     case "LD":
                         // movLeft = -1f;
-                        movX = -1f;
+                        bottonLeftPressed = true;
                         break;
 
                     case "LU":
                         // movLeft = 0f;
-                        movX = 0f;
+                        bottonLeftPressed = false;
                         break;
                     case "RD":
                         // movRight = 1f;
-                        movX = 1f;
+                        bottonRightPressed = true;
                         break;
                     case "RU":
-                      //  movRight = 0f;
-                        movX = 0f;
+                        //  movRight = 0f;
+                        bottonRightPressed = false;
                         break;
 
                     case "SpaceD":
                         movY = 3f;
+                        bottonSpacePressed = true;
                         break;
 
                     case "SpaceU":
                         movY = 0f;
+                        bottonSpacePressed = false;
                         break;
 
                     default:
@@ -70,6 +76,7 @@ public class NetWorkInput : MonoBehaviour {
 	
 	void Update () {
         SendInput();
+        SetInput();
 	}
 
     void SendInput() {
@@ -132,5 +139,21 @@ public class NetWorkInput : MonoBehaviour {
 
             #endregion
         }
+    }
+
+    void SetInput() {
+
+        if(bottonLeftPressed && !bottonRightPressed) {
+            movX = -1f;
+        }
+
+        if (!bottonLeftPressed && bottonRightPressed) {
+            movX = 1f;
+        }
+
+        if (!bottonLeftPressed && !bottonRightPressed) {
+            movX = 0f;
+        }
+
     }
 }

@@ -12,7 +12,7 @@ public class NetWorkTransform : MonoBehaviour {
     CharacterData characterData;
 
     bool uT = true;
-
+    Rigidbody2D rb;
 
     private void Awake() {
 
@@ -20,6 +20,8 @@ public class NetWorkTransform : MonoBehaviour {
         io = go.GetComponent<SocketIOComponent>();
     }
     void Start () {
+
+        rb = GetComponent<Rigidbody2D>();
         characterData = this.gameObject.GetComponent<CharacterData>();
 
         StartCoroutine(UpdateTransform(1f));
@@ -35,7 +37,9 @@ public class NetWorkTransform : MonoBehaviour {
 
                 Vector3 pos = new Vector3(x, y);
 
-                transform.position = pos;
+               // rb.MovePosition(pos);
+               transform.position = pos;
+             
             }
 
         });
